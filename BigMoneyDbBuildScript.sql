@@ -1,4 +1,11 @@
+USE tempdb
+
+DROP DATABASE IF EXISTS BigMoneyDb
+
 CREATE DATABASE BigMoneyDb;
+GO
+
+USE BigMoneyDb
 GO
 
 CREATE SCHEMA t;
@@ -32,7 +39,7 @@ CREATE TABLE t.BankAccount
 	Balance DECIMAL(18, 2)
 );
 GO
-CREATE TABLE .[AccountTransaction]
+CREATE TABLE t.[AccountTransaction]
 (
 	TransactionId INT PRIMARY KEY,
 	AccountId INT,
@@ -82,7 +89,7 @@ BEGIN
 	BEGIN TRY
 		SELECT CustomerId as customerId 
 		, AccountId as accountId
-		, AccountTypeId as accountTypeId
+		, AccountType as accountTypeId
 		, Balance as balance		
 		FROM t.BankAccount WHERE CustomerId = @customerId
 
