@@ -1,0 +1,105 @@
+BigMoneyBanking
+
+Goal : build API endpoints for a banking application, Make a deposit, Make a withdrawal, Close an account, Create an account
+
+Reqs :  C# using the ASP.NET Core Web API template, should use the repository pattern
+,  it’s acceptable for the repositories to return results in code rather than from a database
+, Complete at least the first endpoint
+
+EndPoints : 
+Endpoint 1: Make a deposit
+This endpoint should facilitate a request to deposit a dollar amount in a customer’s account.
+Acceptance : The balance returned should reflect the current balance after the operation
+,The account must exist and belong to that customer.
+,The deposit amount must be greater than 0.
+
+Test : 
+The endpoint will receive the following JSON:
+{
+	customerId: 5,
+	accountId: 17,
+	amount: 112.00
+}
+
+And should return:
+{
+	customerId: 5,
+	accountId: 17,
+	balance: 2287.13,
+	succeeded: true
+}
+
+
+
+Endpoint 2: Make a withdrawal
+This endpoint should facilitate a request to withdraw a dollar amount from a customer’s account.
+Acceptance :The balance returned should reflect the current balance after the operation
+The account must exist and belong to that customer.
+The withdrawal amount must be greater than 0.
+The withdrawal cannot be done if it would bring the balance below 0.
+
+Test: The endpoint will receive the following JSON:
+{
+	customerId: 5,
+	accountId: 17,
+	amount: 112.00
+}
+
+And should return:
+{
+	customerId: 5,
+	accountId: 17,
+	balance: 2287.13,
+	succeeded: true
+}
+
+
+Endpoint 3: Close an account
+This endpoint should facilitate a request to close a customer’s account.
+Acceptance Criteria
+The account must exist and belong to that customer.
+The account can only be closed if the balance is exactly 0.
+The closure is a change of status, but the account should not actually be deleted.
+
+Test: 
+The endpoint will receive the following JSON:
+{
+	customerId: 5,
+	accountId: 17
+}
+
+And should return:
+{
+	customerId: 5,
+	accountId: 17,
+	succeeded: true
+}
+
+Endpoint 4: Create an account
+This endpoint should facilitate a request to create a new account for a customer.
+Acceptance: 
+The customer must exist.
+The initial deposit must be at least 100.
+The account type id should correspond to one of the following values:
+1 - Checking
+2 - Savings
+If this is the customer’s first account, it must be savings.
+
+
+Test: The endpoint will receive the following JSON:
+{
+	customerId: 5,
+	initialDeposit: 525.00,
+	accountTypeId: 1 
+}
+
+And should return:
+{
+	customerId: 5,
+	accountId: 17,
+	accountTypeId: 1,
+	balance: 525.00,
+	succeeded: true
+}
+
+

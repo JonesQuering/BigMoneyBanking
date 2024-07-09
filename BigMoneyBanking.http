@@ -1,0 +1,97 @@
+@BigMoneyBanking_HostAddress = http://localhost:5055
+
+GET {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Accept: application/json
+
+###
+
+POST {{BigMoneyBanking_HostAddress}}/bankAccount/0
+Content-Type: application/json
+
+{
+	"customerId": 0,
+	"initialDeposit": 525.00,
+	"accountTypeId": 1 
+}
+
+###
+
+POST {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+	"customerId": 5,
+	"initialDeposit": 0,
+	"accountTypeId": 2 
+}
+
+###
+
+POST {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+	"customerId": 5,
+	"initialDeposit": 525.00,
+	"accountTypeId": 1 
+}
+
+###
+
+POST {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+	"customerId": 5,
+	"initialDeposit": 525.00,
+	"accountTypeId": 2 
+}
+
+###
+PUT {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+    "customerId": 5,
+    "accountId": 17,
+    "amount": 0.00
+}
+
+###
+PUT {{BigMoneyBanking_HostAddress}}/bankAccount/7
+Content-Type: application/json
+
+{
+    "customerId": 7,
+    "accountId": 17,
+    "amount": 1.00
+}
+
+###
+PUT {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+    "customerId": 5,
+    "accountId": 17,
+    "amount": 1000.00
+}
+
+###
+PUT {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+    "customerId": 5,
+    "accountId": 17,
+    "amount": -10000.00
+}
+###
+PUT {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+    "customerId": 5,
+    "accountId": 17,
+    "amount": -1000.00
+}
