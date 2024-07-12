@@ -8,12 +8,39 @@ namespace BigMoneyBanking.Controllers;
 [Route("[controller]")]
 public class BankAccountController : ControllerBase
 {
-    [HttpPost("{customerId}")]
-    public IActionResult CreateBankAccount(int customerId, BankAccountRequest bankAccountRequest)
+    private readonly BankAccountService _bankAccountService;
+    public BankAccountController(BankAccountService bankAccountService)
     {
+        _bankAccountService = bankAccountService;
+    }
+    
+    [HttpPost("{customerId}")]
+    public IActionResult CreateBankAccount(int customerId, AccountCreationRequest request)
+    {
+        ///The endpoint will receive the following JSON:
+        // {
+        // 	customerId: 5,
+        // 	initialDeposit: 525.00,
+        // 	accountTypeId: 1 
+        // }
+        //         And should return:
+        // {
+        // 	customerId: 5,
+        // 	accountId: 17,
+        // 	accountTypeId: 1,
+        // 	balance: 525.00,
+        // 	succeeded: true
+        // }
+
         try
         {
-            BankAccount bankAccount = BankAccountService.CreateBankAccount(customerId, bankAccountRequest.initialDeposit, bankAccountRequest.accountTypeId);
+            var bankAccount = _bankAccountService.CreateBankAccount(new BankAccount
+            {
+                customerId = request.CustomerId,
+                balance = request.InitialDeposit,
+                accountId = 17,
+                accountTypeId = request.AccountTypeId
+            });
             return Ok(bankAccount);
         }
         catch (Exception ex)
@@ -23,11 +50,38 @@ public class BankAccountController : ControllerBase
     }
     
     [HttpPut("{customerId}")]
-    public IActionResult UpdateBalance(int customerId, BankAccountRequest bankAccountRequest)
+    public IActionResult UpdateBalance(int customerId, BalanceChangeRequest request)
     {
+        ///make a deposit
+        ///The endpoint will receive the following JSON:
+        // {
+        // 	customerId: 5,
+        // 	accountId: 17,
+        // 	amount: 112.00
+        // }
+        //make a withdrawal
+        ///The endpoint will receive the following JSON:
+        // {
+        // 	customerId: 5,
+        // 	accountId: 17,
+        // 	amount: 112.00
+        // }
+    ///And should return:
+    // {
+    // 	customerId: 5,
+    // 	accountId: 17,
+    // 	balance: 2287.13,
+    // 	succeeded: true
+    // }
+
         try
         {
-            BankAccount bankAccount = BankAccountService.UpdateBalance(customerId, bankAccountRequest.accountId, bankAccountRequest.amount);
+            var bankAccount = _bankAccountService.UpdateBalance(new BankAccount
+            {
+                customerId = request.CustomerId,
+                accountId = request.AccountId,
+                balance = request.Amount
+            });
             return Ok(bankAccount);
         }
         catch (Exception ex)
@@ -36,12 +90,30 @@ public class BankAccountController : ControllerBase
         }
     }
     [HttpDelete("{customerId}")]
-    public IActionResult CloseBankAccount(int customerId, CloseBankAccountRequest closeBankAccount)
+    public IActionResult CloseAccount(int customerId, CloseAccountRequest request)
     {
+        ///close an account 
+        ///The endpoint will receive the following JSON:
+        // {
+        // 	customerId: 5,
+        // 	accountId: 17
+        // }
+        ///And should return:
+        // {
+        // 	customerId: 5,
+        // 	accountId: 17,
+        // 	succeeded: true
+        // }
+
         try
         {
-            bool result = BankAccountService.CloseBankAccount(customerId, closeBankAccount.accountId, closeBankAccount.accountTypeId);
-            return Ok(result);
+            var bankAccount = _bankAccountService.CloseAccount(new BankAccount
+            {
+                customerId = customerId,
+                accountId = request.AccountId
+            });
+            
+            return Ok(bankAccount);
         }
         catch (Exception ex)
         {
@@ -53,7 +125,7 @@ public class BankAccountController : ControllerBase
     {
         try
         {
-            List<BankAccount> bankAccounts = BankAccountService.GetBankAccounts(customerId);
+            List<BankAccount> bankAccounts = _bankAccountService.GetBankAccounts(customerId);
             return Ok(bankAccounts);
         }
         catch (Exception ex)

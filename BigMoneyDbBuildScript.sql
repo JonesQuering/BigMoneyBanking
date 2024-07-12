@@ -36,7 +36,8 @@ CREATE TABLE t.BankAccount
 	AccountType NVARCHAR(50),
 	AccountNumber NVARCHAR(50),
 	RoutingNumber NVARCHAR(50),
-	Balance DECIMAL(18, 2)
+	Balance DECIMAL(18, 2),
+	Inactive BIT
 );
 GO
 CREATE TABLE t.[AccountTransaction]
@@ -121,3 +122,50 @@ BEGIN
 		RETURN 1 --some random error
 	END CATCH
 END;
+
+GO
+CREATE OR ALTER PROC p.CloseAccount
+	@customerId INT = 5
+	,@accountId INT = 17
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+	BEGIN TRY
+
+		DECLARE @balance DECIMAL(18, 2) = (SELECT TOP (1)Balance
+		 FROM t.BankAccount 
+		 WHERE CustomerId = @customerId 
+		 AND AccountId = @accountId)
+
+		IF @balance > 0
+			RETURN 2 --balance must be zero to close account
+
+		UPDATE t.BankAccount
+		SET Inactive = 1
+		WHERE CustomerId = @customerId 
+		AND AccountId = @accountId;
+
+		RETURN 0
+	END TRY
+	BEGIN CATCH
+		RETURN 1 --some random error
+	END CATCH
+END;
+GO
+
+--create server user
+CREATE LOGIN [BigMoneyAppUser] WITH PASSWORD = 'Password123';
+GO
+
+USE BigMoneyDb;
+GO
+--create database user
+
+CREATE USER FOR LOGIN [BigMoneyAppUser];
+GO
+
+--grant execute permissions on proc schema
+GRANT EXECUTE ON SCHEMA::p TO [BigMoneyAppUser];
+GO
+

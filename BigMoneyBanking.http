@@ -93,5 +93,15 @@ Content-Type: application/json
 {
     "customerId": 5,
     "accountId": 17,
-    "amount": -1000.00
+    "amount": -1050.00
+}
+
+###
+
+DELETE {{BigMoneyBanking_HostAddress}}/bankAccount/5
+Content-Type: application/json
+
+{
+    "customerId": 5,
+    "accountId": 17
 }
